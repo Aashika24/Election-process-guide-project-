@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Process Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+ 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+ 
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+ 
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+ 
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+ 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        /* Removed heavy gradient animation for performance */
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+ 
+        /* Fun floating background shapes */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+ 
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: white;
+            top: 10%;
+            left: -150px;
+        }
+ 
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: white;
+            bottom: 10%;
+            right: -200px;
+            animation-delay: 3s;
+        }
+ 
+        .container {
+            max-width: 1100px;
+            width: 95%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+ 
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 100px rgba(0, 0, 0, 0.35);
+        }
+ 
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .header::before {
+            content: '⭐';
+            position: absolute;
+            font-size: 3em;
+            top: 20px;
+            left: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+ 
+        .header::after {
+            content: '🎉';
+            position: absolute;
+            font-size: 3em;
+            top: 20px;
+            right: 20px;
+            animation: pulse 2s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+ 
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+ 
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            animation: fadeIn 1s ease;
+        }
+ 
+        .tabs {
+            display: flex;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            border-bottom: 3px solid transparent;
+            position: relative;
+        }
+ 
+        .tabs::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 25%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #f093fb);
+            transition: left 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+ 
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #6c757d;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+
+        .tab:focus-visible {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+ 
+        .tab:hover {
+            color: #667eea;
+            transform: translateY(-3px) scale(1.05);
+        }
+ 
+        .tab.active {
+            color: #667eea;
+            transform: scale(1.1);
+        }
+ 
+        .tab:nth-child(1).active ~ .tabs::after { left: 0%; }
+        .tab:nth-child(2).active ~ .tabs::after { left: 25%; }
+        .tab:nth-child(3).active ~ .tabs::after { left: 50%; }
+        .tab:nth-child(4).active ~ .tabs::after { left: 75%; }
+ 
+        .content {
+            padding: 30px;
+        }
+ 
+        .tab-content {
+            display: none;
+        }
+ 
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+ 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+ 
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #667eea, #764ba2, #f093fb);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+ 
+        .timeline-item {
+            position: relative;
+            padding-left: 70px;
+            margin-bottom: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+ 
+        .timeline-item:hover {
+            transform: translateX(10px);
+        }
+ 
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.4) rotate(180deg);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+        }
+ 
+        .timeline-item:hover .timeline-content {
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+ 
+        .timeline-dot {
+            position: absolute;
+            left: 20px;
+            top: 5px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: white;
+            border: 5px solid #667eea;
+            transition: all 0.3s ease;
+            z-index: 1;
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+            animation: pulse-ring 2s infinite paused;
+        }
+ 
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        }
+ 
+        .timeline-item.completed .timeline-dot {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            animation: completed-spin 0.6s ease;
+        }
+ 
+        @keyframes completed-spin {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+ 
+        .timeline-content {
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+ 
+        .timeline-content:hover {
+            border-left-color: #f093fb;
+        }
+ 
+        .timeline-content h3 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+ 
+        .timeline-content .date {
+            color: #6c757d;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            display: inline-block;
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+ 
+        .timeline-content p {
+            color: #495057;
+            line-height: 1.6;
+        }
+ 
+        .timeline-content .details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+ 
+        .timeline-content .details.show {
+            display: block;
+        }
+ 
+        .timeline-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+ 
+        .timeline-content li {
+            margin-bottom: 8px;
+            color: #495057;
+        }
+ 
+        .step-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border-left: 6px solid #667eea;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+ 
+        .step-card:hover::before {
+            opacity: 1;
+        }
+ 
+        .step-card:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+            border-left-color: #f093fb;
+        }
+ 
+        .step-card:nth-child(odd) {
+            border-left-color: #764ba2;
+        }
+ 
+        .step-card:nth-child(3n) {
+            border-left-color: #f093fb;
+        }
+ 
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.4em;
+            margin-right: 20px;
+            float: left;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+ 
+        .step-card:hover .step-number {
+            transform: rotate(360deg) scale(1.1);
+            animation: none;
+        }
+ 
+        .step-card h3 {
+            color: #212529;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+ 
+        .step-card p {
+            color: #495057;
+            line-height: 1.7;
+        }
+ 
+        .quiz-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+ 
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+ 
+        .question {
+            font-size: 1.3em;
+            color: #212529;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+ 
+        .quiz-option {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 18px 25px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 3px solid #e9ecef;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+        }
+ 
+        .quiz-option::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+ 
+        .quiz-option:hover::before {
+            left: 100%;
+        }
+ 
+        .quiz-option:hover {
+            border-color: #667eea;
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+ 
+        .quiz-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f2ff, #fff);
+            transform: scale(1.02);
+        }
+ 
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #d4edda, #fff);
+            animation: celebrate 0.6s ease;
+        }
+ 
+        .quiz-option.correct::after {
+            content: '✓';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #28a745;
+            font-weight: bold;
+        }
+ 
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.05) rotate(-2deg); }
+            75% { transform: scale(1.05) rotate(2deg); }
+        }
+ 
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da, #fff);
+            animation: shake 0.5s ease;
+        }
+ 
+        .quiz-option.incorrect::after {
+            content: '✗';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #dc3545;
+            font-weight: bold;
+        }
+ 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+ 
+        .quiz-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+ 
+        .quiz-feedback.show {
+            display: block;
+        }
+ 
+        .quiz-feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+ 
+        .quiz-feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+ 
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+ 
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+ 
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+        }
+ 
+        .btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+ 
+        .checklist {
+            list-style: none;
+        }
+ 
+        .checklist li {
+            padding: 20px;
+            background: linear-gradient(135deg,#fff 0%,#f8f9fa 100%);
+            margin-bottom:12px;
+            border-radius:15px;
+            cursor:pointer;
+            transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
+            border-left:5px solid #e9ecef;
+            box-shadow:0 3px 10px rgba(0,0,0,0.05);
+            font-weight:600;
+        }
+        .checklist li:hover {
+            transform:translateX(15px) scale(1.02);
+            border-left-color:#667eea;
+            box-shadow:0 8px 25px rgba(102,126,234,0.15);
+        }
+        .checklist li:focus-visible {
+            outline:3px solid #667eea;
+            outline-offset:2px;
+        }
+ 
+        .checklist li.checked {
+            background: linear-gradient(135deg, #d4edda 0%, #a8e6cf 100%);
+            border-left-color: #28a745;
+            animation: checkBounce 0.5s ease;
+        }
+ 
+        @keyframes checkBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+ 
+        .checklist li::before {
+            content: '☐';
+            margin-right: 15px;
+            font-size: 1.5em;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+ 
+        .checklist li:hover::before {
+            transform: scale(1.2) rotate(10deg);
+        }
+ 
+        .checklist li.checked::before {
+            content: '✅';
+            animation: spin 0.5s ease;
+        }
+ 
+        @keyframes spin {
+            from { transform: rotate(0deg) scale(0); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+ 
+        .info-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #fff9e6 100%);
+            border: 2px solid #ffc107;
+            border-left: 6px solid #ffc107;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.2);
+            transition: all 0.3s ease;
+        }
+ 
+        .info-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.3);
+        }
+ 
+        .info-box h4 {
+            color: #856404;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+ 
+        .info-box p {
+            color: #856404;
+            margin: 0;
+            line-height: 1.6;
+        }
+ 
+        .progress-bar {
+            height: 35px;
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 25px 0;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
+        }
+ 
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+ 
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+ 
+@media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                padding: 20px 15px;
+                min-height: 60px; /* Better touch target */
+                font-size: 1.1em;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .step-number {
+                float: none;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            /* Fix timeline on mobile */
+            .timeline::before {
+                left: 15px;
+                width: 3px;
+            }
+
+            .timeline-dot {
+                left: 5px;
+                width: 20px;
+                height: 20px;
+                border-width: 4px;
+            }
+
+            .timeline-item {
+                padding-left: 55px;
+                margin-bottom: 30px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .timeline::before {
+                left: 12px;
+            }
+
+            .timeline-dot {
+                left: 2px;
+                width: 18px;
+                height: 18px;
+            }
+
+            .timeline-item {
+                padding-left: 50px;
+            }
+
+            .container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗳️ Election Process Guide</h1>
+            <p>Your interactive guide to understanding elections</p>
+        </div>
+ 
+        <div class="tabs" role="tablist" aria-label="Election guide tabs">
+            <button class="tab active" role="tab" aria-selected="true" aria-controls="timeline" tabindex="0" onclick="showTab('timeline')" onkeydown="handleTabKey(event, this)">📅 Timeline</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="steps" tabindex="-1" onclick="showTab('steps')" onkeydown="handleTabKey(event, this)">📝 How to Vote</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="quiz" tabindex="-1" onclick="showTab('quiz')" onkeydown="handleTabKey(event, this)">🎯 Test Your Knowledge</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="checklist" tabindex="-1" onclick="showTab('checklist')" onkeydown="handleTabKey(event, this)">✅ Voter Checklist</button>
+        </div>
+ 
+        <div class="content">
+            <!-- Timeline Tab -->
+            <div id="timeline" class="tab-content active">
+                <h2 style="margin-bottom: 30px; color: #212529;">Election Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Voter Registration</h3>
+                            <div class="date">Ongoing - Deadlines vary by state</div>
+                            <p>Register to vote or update your registration information.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Check if you're already registered</li>
+                                    <li>Register online, by mail, or in person</li>
+                                    <li>Registration deadlines are typically 15-30 days before election</li>
+                                    <li>Some states offer same-day registration</li>
+                                    <li>Update your address if you've moved</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Candidate Filing Period</h3>
+                            <div class="date">Months before primary elections</div>
+                            <p>Candidates declare their intention to run for office.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Candidates file paperwork with election officials</li>
+                                    <li>Must meet eligibility requirements</li>
+                                    <li>Pay filing fees or collect signatures</li>
+                                    <li>Declare party affiliation (if applicable)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Primary Elections</h3>
+                            <div class="date">Spring/Summer of election year</div>
+                            <p>Party members select their nominees for the general election.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Open primaries: any registered voter can participate</li>
+                                    <li>Closed primaries: only party members can vote</li>
+                                    <li>Presidential primaries determine delegates</li>
+                                    <li>State and local races narrow down candidates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Campaign Season</h3>
+                            <div class="date">Ongoing throughout election cycle</div>
+                            <p>Candidates campaign, debate, and present their platforms.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Candidate debates and town halls</li>
+                                    <li>Campaign advertisements on TV, radio, and online</li>
+                                    <li>Door-to-door canvassing</li>
+                                    <li>Campaign rallies and events</li>
+                                    <li>Fundraising activities</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Early Voting Period</h3>
+                            <div class="date">2-4 weeks before Election Day</div>
+                            <p>Cast your ballot before Election Day at designated locations.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Available in most states</li>
+                                    <li>Vote at early voting centers</li>
+                                    <li>More flexible hours and locations</li>
+                                    <li>Avoid Election Day crowds</li>
+                                    <li>Check your state's early voting dates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Mail-In/Absentee Voting</h3>
+                            <div class="date">Request weeks in advance</div>
+                            <p>Request and submit a ballot by mail.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Request your ballot early</li>
+                                    <li>Complete and sign the ballot carefully</li>
+                                    <li>Mail it back with proper postage</li>
+                                    <li>Or drop it off at designated locations</li>
+                                    <li>Track your ballot status online</li>
+                                    <li>Must be received by deadline (varies by state)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Election Day</h3>
+                            <div class="date">First Tuesday after first Monday in November</div>
+                            <p>Cast your vote at your polling location.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Polls typically open 6-7 AM, close 7-8 PM</li>
+                                    <li>Bring valid ID (requirements vary by state)</li>
+                                    <li>Know your polling location</li>
+                                    <li>If in line when polls close, you can still vote</li>
+                                    <li>Ask for help if needed - poll workers are there to assist</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Vote Counting & Results</h3>
+                            <div class="date">Election night and following days</div>
+                            <p>Votes are counted and results are reported.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Polls close and counting begins</li>
+                                    <li>Early results reported on election night</li>
+                                    <li>Mail-in ballots may take longer to count</li>
+                                    <li>Close races may require recounts</li>
+                                    <li>Official certification happens weeks later</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="timeline-item" onclick="toggleDetails(this)">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Certification & Inauguration</h3>
+                            <div class="date">Weeks to months after election</div>
+                            <p>Results are certified and winners take office.</p>
+                            <div class="details">
+                                <ul>
+                                    <li>Election results are officially certified</li>
+                                    <li>Any challenges or recounts are resolved</li>
+                                    <li>Winners prepare for transition</li>
+                                    <li>Inauguration ceremonies held</li>
+                                    <li>Elected officials begin their terms</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- How to Vote Tab -->
+            <div id="steps" class="tab-content">
+                <h2 style="margin-bottom: 30px; color: #212529;">Step-by-Step Voting Guide</h2>
+                
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Check Your Registration</h3>
+                    <p>Verify you're registered to vote at your current address. Visit your state's election website or use the national voter registration verification tool. If you're not registered or need to update your information, do so before the deadline.</p>
+                </div>
+ 
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Research Candidates & Issues</h3>
+                    <p>Learn about the candidates running for office and any ballot measures. Read voter guides, watch debates, and review candidate websites. Consider their positions on issues that matter to you.</p>
+                </div>
+ 
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Choose Your Voting Method</h3>
+                    <p>Decide whether to vote early in person, by mail/absentee ballot, or on Election Day. Each method has different deadlines and requirements. Choose what works best for your schedule.</p>
+                </div>
+ 
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Prepare Required Documents</h3>
+                    <p>Check what ID or documentation you need to bring. Requirements vary by state and voting method. Common IDs include driver's license, passport, or state ID card.</p>
+                </div>
+ 
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3>Find Your Polling Location</h3>
+                    <p>Locate your assigned polling place if voting in person. This may change from previous elections, so verify the location. Check polling hours and plan your visit to avoid peak times.</p>
+                </div>
+ 
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3>Cast Your Ballot</h3>
+                    <p>Follow instructions carefully when marking your ballot. Take your time and review your choices before submitting. If you make a mistake, ask for a new ballot. Don't hesitate to ask poll workers for assistance.</p>
+                </div>
+ 
+                <div class="step-card">
+                    <div class="step-number">7</div>
+                    <h3>Verify Your Vote Was Counted</h3>
+                    <p>If you voted by mail, track your ballot online. Many states offer ballot tracking systems. Keep your "I Voted" sticker or receipt as proof of voting. Follow up if you notice any issues.</p>
+                </div>
+ 
+                <div class="info-box">
+                    <h4>💡 Important Reminder</h4>
+                    <p>Your vote is private. You are never required to tell anyone who you voted for. If you experience any problems or intimidation at the polls, contact your local election office immediately.</p>
+                </div>
+            </div>
+ 
+            <!-- Quiz Tab -->
+            <div id="quiz" class="tab-content">
+                <h2 style="margin-bottom: 30px; color: #212529;">Test Your Election Knowledge</h2>
+                <div id="quizProgress" class="progress-bar">
+                    <div class="progress-fill">0% Complete</div>
+                </div>
+                <div id="quizArea"></div>
+            </div>
+ 
+            <!-- Checklist Tab -->
+            <div id="checklist" class="tab-content">
+                <h2 style="margin-bottom: 30px; color: #212529;">Voter Readiness Checklist</h2>
+                <p style="margin-bottom: 20px; color: #6c757d;">Click each item as you complete it to track your progress.</p>
+                
+                <div id="checklistProgress" class="progress-bar">
+                    <div class="progress-fill">0% Complete</div>
+                </div>
+ 
+        <ul class="checklist" role="list">
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Check my voter registration status</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Update my registration if I moved</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Research all candidates on my ballot</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Review ballot measures and propositions</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Decide on my voting method (in-person, early, or mail)</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Request absentee/mail ballot (if applicable)</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Find my polling location</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Check what ID I need to bring</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Plan my schedule for Election Day or early voting</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Review sample ballot online</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Make note of polling hours</li>
+                    <li role="checkbox" aria-checked="false" tabindex="0" onclick="toggleCheck(this)" onkeydown="handleCheckKey(event, this)">Tell friends and family about voting</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "When is Election Day for federal elections in the United States?",
+                options: [
+                    "First Tuesday in November",
+                    "First Tuesday after the first Monday in November",
+                    "Second Tuesday in November",
+                    "Last Tuesday in October"
+                ],
+                correct: 1,
+                explanation: "Election Day is the first Tuesday after the first Monday in November. This ensures Election Day falls between November 2 and November 8."
+            },
+            {
+                question: "What should you bring with you when voting in person?",
+                options: [
+                    "Nothing is required",
+                    "Proof of residency",
+                    "Valid ID (requirements vary by state)",
+                    "Voter registration card"
+                ],
+                correct: 2,
+                explanation: "Most states require some form of valid identification, though specific requirements vary. Check your state's rules before heading to the polls."
+            },
+            {
+                question: "Can you still vote if you're in line when polls close?",
+                options: [
+                    "No, you must be inside the polling place",
+                    "Yes, as long as you were in line when polls closed",
+                    "Only if you have an emergency",
+                    "It depends on the state"
+                ],
+                correct: 1,
+                explanation: "Yes! If you're in line when the polls close, you have the right to vote. Stay in line until you can cast your ballot."
+            },
+            {
+                question: "What happens during primary elections?",
+                options: [
+                    "The president is elected",
+                    "Citizens vote on ballot measures only",
+                    "Political parties select their nominees for the general election",
+                    "Local officials are elected"
+                ],
+                correct: 2,
+                explanation: "Primary elections are when political parties choose their candidates who will run in the general election. Voters help decide which candidates will represent each party."
+            },
+            {
+                question: "How can you verify your ballot was counted if you voted by mail?",
+                options: [
+                    "You cannot verify mail ballots",
+                    "Wait for election results",
+                    "Use your state's ballot tracking system",
+                    "Call your county election office"
+                ],
+                correct: 2,
+                explanation: "Most states offer online ballot tracking systems where you can check the status of your mail-in ballot from when it's sent to when it's counted."
+            }
+        ];
+ 
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+ 
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active from all tab buttons
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+                tab.tabIndex = -1;
+            });
+            
+            // Show selected tab
+            const targetTab = document.getElementById(tabName);
+            targetTab.classList.add('active');
+            
+            const activeButton = event ? event.target.closest('.tab') : document.querySelector('.tab[aria-controls="' + tabName + '"]');
+            if (activeButton) {
+                activeButton.classList.add('active');
+                activeButton.setAttribute('aria-selected', 'true');
+                activeButton.tabIndex = 0;
+                activeButton.focus();
+            }
+
+            // Initialize quiz if quiz tab is selected
+            if (tabName === 'quiz' && currentQuestion === 0) {
+                loadQuestion();
+            }
+        }
+
+        function handleTabKey(event, button) {
+            const tabs = Array.from(document.querySelectorAll('.tab'));
+            const currentIndex = tabs.indexOf(button);
+            
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                const nextIndex = (currentIndex + 1) % tabs.length;
+                tabs[nextIndex].focus();
+                showTab(tabs[nextIndex].getAttribute('aria-controls'));
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                const prevIndex = currentIndex === 0 ? tabs.length - 1 : currentIndex - 1;
+                tabs[prevIndex].focus();
+                showTab(tabs[prevIndex].getAttribute('aria-controls'));
+            } else if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                showTab(button.getAttribute('aria-controls'));
+            }
+        }
+ 
+        function toggleDetails(element) {
+            const details = element.querySelector('.details');
+            const dot = element.querySelector('.timeline-dot');
+            
+            // Close all other details
+            document.querySelectorAll('.timeline-item .details').forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('show');
+                }
+            });
+            
+            details.classList.toggle('show');
+            
+            // Mark as completed when expanded
+            if (details.classList.contains('show')) {
+                element.classList.add('completed');
+            }
+        }
+ 
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+            const isChecked = element.classList.contains('checked');
+            element.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+            updateChecklistProgress();
+        }
+
+        function handleCheckKey(event, element) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggleCheck(element);
+            } else if (event.key === 'Tab') {
+                // Allow normal tab navigation
+            }
+        }
+ 
+        function updateChecklistProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            const progressBar = document.querySelector('#checklistProgress .progress-fill');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '% Complete';
+        }
+ 
+        function loadQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+ 
+            const q = quizQuestions[currentQuestion];
+            const quizArea = document.getElementById('quizArea');
+            
+            let html = `
+                <div class="quiz-container">
+                    <div class="question">Question ${currentQuestion + 1} of ${quizQuestions.length}: ${q.question}</div>
+            `;
+            
+            q.options.forEach((option, index) => {
+                html += `
+                    <div class="quiz-option" onclick="selectAnswer(${index})">
+                        ${option}
+                    </div>
+                `;
+            });
+            
+            html += `
+                    <div id="feedback" class="quiz-feedback"></div>
+                </div>
+            `;
+            
+            quizArea.innerHTML = html;
+        }
+ 
+        function selectAnswer(selectedIndex) {
+            const q = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback');
+            
+            // Disable all options
+            options.forEach((option, index) => {
+                option.onclick = null;
+                option.style.pointerEvents = 'none';
+                if (index === q.correct) {
+                    setTimeout(() => option.classList.add('correct'), 200);
+                } else if (index === selectedIndex) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Show feedback with animation
+            if (selectedIndex === q.correct) {
+                correctAnswers++;
+                feedback.className = 'quiz-feedback show correct';
+                feedback.innerHTML = `
+                    <div style="font-size: 2em; margin-bottom: 10px; animation: bounce 0.5s ease;">✓</div>
+                    <strong style="font-size: 1.3em;">Correct!</strong><br>
+                    <p style="margin-top: 10px;">${q.explanation}</p>
+                    <button class="btn" onclick="nextQuestion()">Next Question →</button>
+                `;
+                // Add sparkle effect for correct answer
+                createSparkles(options[selectedIndex]);
+            } else {
+                feedback.className = 'quiz-feedback show incorrect';
+                feedback.innerHTML = `
+                    <div style="font-size: 2em; margin-bottom: 10px; animation: shake 0.5s ease;">✗</div>
+                    <strong style="font-size: 1.3em;">Not quite!</strong><br>
+                    <p style="margin-top: 10px;">${q.explanation}</p>
+                    <button class="btn" onclick="nextQuestion()">Next Question →</button>
+                `;
+            }
+            
+            updateQuizProgress();
+        }
+ 
+        function createSparkles(element) {
+            const rect = element.getBoundingClientRect();
+        const sparkleCount = 5; // Reduced from 10 for performance
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.textContent = '✨';
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = rect.left + rect.width / 2 + 'px';
+                sparkle.style.top = rect.top + rect.height / 2 + 'px';
+                sparkle.style.fontSize = '20px';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.zIndex = '9999';
+                
+                const angle = (Math.PI * 2 * i) / sparkleCount;
+                const velocity = 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                sparkle.style.animation = 'sparkle 1s ease-out forwards';
+                sparkle.style.setProperty('--vx', vx + 'px');
+                sparkle.style.setProperty('--vy', vy + 'px');
+                
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            }
+            
+            // Add sparkle animation to stylesheet
+            if (!document.getElementById('sparkle-style')) {
+                const style = document.createElement('style');
+                style.id = 'sparkle-style';
+                style.textContent = `
+                    @keyframes sparkle {
+                        0% { transform: translate(0, 0) scale(0); opacity: 1; }
+                        100% { transform: translate(var(--vx), var(--vy)) scale(1); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+ 
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+ 
+        function updateQuizProgress() {
+            const percentage = Math.round(((currentQuestion + 1) / quizQuestions.length) * 100);
+            const progressBar = document.querySelector('#quizProgress .progress-fill');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '% Complete';
+        }
+ 
+        function showQuizResults() {
+            const percentage = Math.round((correctAnswers / quizQuestions.length) * 100);
+            const quizArea = document.getElementById('quizArea');
+            
+            let message = '';
+            let emoji = '';
+            
+            if (percentage === 100) {
+                message = "Perfect score! You're an election expert!";
+                emoji = "🏆";
+                createConfetti();
+            } else if (percentage >= 80) {
+                message = "Great job! You know your stuff!";
+                emoji = "🌟";
+            } else if (percentage >= 60) {
+                message = "Good effort! Keep learning!";
+                emoji = "👍";
+            } else {
+                message = "Keep studying! Review the timeline and steps.";
+                emoji = "📚";
+            }
+            
+            quizArea.innerHTML = `
+                <div class="quiz-container" style="text-align: center;">
+                    <div style="font-size: 5em; margin-bottom: 20px; animation: bounce 1s ease-in-out infinite;">${emoji}</div>
+                    <h2 style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; font-size: 2em;">Quiz Complete!</h2>
+                    <p style="font-size: 1.4em; margin-bottom: 15px; font-weight: 600;">
+                        You got ${correctAnswers} out of ${quizQuestions.length} correct
+                    </p>
+                    <div style="font-size: 3em; font-weight: bold; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; animation: pulse 1.5s ease-in-out infinite;">
+                        ${percentage}%
+                    </div>
+                    <p style="margin-bottom: 30px; font-size: 1.2em; color: #495057;">${message}</p>
+                    <button class="btn" onclick="restartQuiz()">🔄 Try Again</button>
+                </div>
+            `;
+        }
+ 
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#ffc107', '#28a745'];
+        const confettiCount = 20; // Reduced from 50 for performance
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.opacity = '1';
+                confetti.style.zIndex = '9999';
+                confetti.style.animation = `confetti ${2 + Math.random() * 2}s ease-out forwards`;
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+ 
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            const progressBar = document.querySelector('#quizProgress .progress-fill');
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0% Complete';
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
