@@ -1,0 +1,15 @@
+start "" "election process guide project.html"
+```
+
+## Optional: Local server (if behind firewall)
+```
+# Python 3 (any version)
+python -m http.server 8000
+# Then visit: http://localhost:8000/election process guide project.html
+```
+
+## VSCode Extensions (recommended)
+```
+HTML CSS Support
+Live Server
+auto Rename Tag
